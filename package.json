@@ -1,0 +1,15 @@
+{
+  "name": "mpls-label-stack-validator",
+  "version": "1.0.0",
+  "description": "多跳 MPLS 标签转发校验器：离线分析控制面快照，模拟 L3VPN/TE 隧道的完整标签栈变化",
+  "type": "module",
+  "main": "src/validator.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate": "node src/cli.js"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,57 @@
+{
+  "defaults": { "maxStackDepth": 8, "defaultMtu": 1500 },
+  "nodes": {
+    "PE1": {
+      "interfaces": { "eth0": { "mtu": 1500 } },
+      "labelContexts": {
+        "VRF-A": {
+          "lfib": [
+            { "inLabel": 100, "action": "push", "pushLabels": [300], "nextHop": "P1", "outInterface": "eth0" }
+          ],
+          "routes": []
+        }
+      }
+    },
+    "P1": {
+      "interfaces": { "eth0": { "mtu": 1500 } },
+      "labelContexts": {
+        "VRF-A": {
+          "lfib": [
+            { "inLabel": 300, "action": "swap", "outLabel": 301, "nextHop": "P2", "outInterface": "eth0" }
+          ]
+        }
+      }
+    },
+    "P2": {
+      "interfaces": { "eth0": { "mtu": 1500 } },
+      "labelContexts": {
+        "VRF-A": {
+          "lfib": [
+            { "inLabel": 301, "action": "php", "nextHop": "PE2", "outInterface": "eth0" }
+          ]
+        }
+      }
+    },
+    "PE2": {
+      "interfaces": {},
+      "labelContexts": {
+        "VRF-A": {
+          "lfib": [
+            { "inLabel": 100, "action": "pop" }
+          ]
+        }
+      }
+    }
+  },
+  "flows": [
+    {
+      "name": "l3vpn-primary",
+      "ingress": "PE1",
+      "vrf": "VRF-A",
+      "inInterface": "eth0",
+      "labelStack": [100],
+      "ttl": 64,
+      "packetSize": 1400
+    }
+  ]
+}
